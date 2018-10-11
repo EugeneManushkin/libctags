@@ -169,5 +169,4 @@ add_definitions (
     -Dstrcasecmp=stricmp
 )
 
-#TODO: rename
-add_library(ctags_internal STATIC ${CTAGS_SRC})
+add_library(ctags_internal OBJECT ${CTAGS_SRC})

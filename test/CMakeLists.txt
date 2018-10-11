@@ -1,12 +1,6 @@
 include_directories (
-    ../lib/ctags_internal/ctags/main
+    ../include
 )
 
-add_definitions (
-    -Dbool=int
-    -Dtrue=1
-    -Dfalse=0
-)
-
-add_executable(ctags_test ../lib/ctags_internal/ctags/main/main.c)
-target_link_libraries(ctags_test ctags_internal)
+add_executable(ctags_test main.cpp)
+target_link_libraries(ctags_test libctags_static)

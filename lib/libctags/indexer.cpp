@@ -56,7 +56,7 @@ namespace
   class IndexerImpl : public LibCtags::Indexer
   {
   public:
-    IndexerImpl::IndexerImpl()
+    IndexerImpl()
       : Executable("CtagsTestProgram")
     {
       initDefaultTrashBox();

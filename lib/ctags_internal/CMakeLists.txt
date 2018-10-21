@@ -166,6 +166,7 @@ add_definitions (
     -Dbool=int
     -Dtrue=1
     -Dfalse=0
+    -Dprivate=private_
     -Dstrcasecmp=stricmp
 )
 

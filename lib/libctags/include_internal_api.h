@@ -1,5 +1,3 @@
-// This is include workaround file to avoid including <writer.h> which could not be compiled in C++ because of invalid "sTagWriter::private" member variable name
-
 #pragma once
 
 #ifdef __cplusplus
@@ -9,11 +7,14 @@ extern "C" {
 #define bool int
 #define false 0
 #define true 1
+#define private private_
 
 #include <error.h>
+#include <field.h>
 #include <gcc-attr.h>
 #include <routines.h>
 #include <trashbox.h>
+#include <writer.h>
 // workaround undefined langType in xtag.h
 #include <types.h>
 #include <xtag.h>
@@ -24,20 +25,8 @@ extern "C" {
   #define DEBUG_INIT()
 #endif
 
-typedef enum eWriterType {
-	WRITER_DEFAULT,
-	WRITER_U_CTAGS = WRITER_DEFAULT,
-	WRITER_E_CTAGS,
-	WRITER_ETAGS,
-	WRITER_XREF,
-	WRITER_JSON,
-	WRITER_COUNT,
-} writerType;
-
-void setTagWriter(writerType otype);
 void debugInit(void);
 bool checkRegex(void);
-void initFieldObjects(void);
 void initOptions(void);
 void initializeParsing(void);
 bool isExcludedFile(const char* const name);
@@ -49,6 +38,7 @@ void verbose(const char *const format, ...) CTAGS_ATTR_PRINTF (1, 2);
 #undef bool
 #undef false
 #undef true
+#undef private
 
 #ifdef __cplusplus
 }

@@ -12,8 +12,6 @@
 extern "C" {
 #endif
 
-extern char *CurrentDirectory;
-
 int isDestinationStdout(void)
 {
   return 0;

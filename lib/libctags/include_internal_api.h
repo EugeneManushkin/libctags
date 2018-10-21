@@ -34,6 +34,8 @@ bool parseFile(const char *const fileName);
 void openTagFile(void);
 void closeTagFile(const int resize);
 void verbose(const char *const format, ...) CTAGS_ATTR_PRINTF (1, 2);
+unsigned int countParsers (void);
+const char *getLanguageName (const langType language);
 
 #undef bool
 #undef false

@@ -4,8 +4,9 @@ namespace LibCtags
 {
   class Indexer
   {
-    public:
-      virtual void Index(char const* file) = 0;
+  public:
+    virtual ~Indexer() = default;
+    virtual void Index(char const* file) = 0;
   };
 
   Indexer& GetIndexer();

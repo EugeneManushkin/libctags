@@ -12,6 +12,7 @@ extern "C" {
 #include <error.h>
 #include <field.h>
 #include <gcc-attr.h>
+#include <kind.h>
 #include <routines.h>
 #include <trashbox.h>
 #include <writer.h>
@@ -36,6 +37,10 @@ void closeTagFile(const int resize);
 void verbose(const char *const format, ...) CTAGS_ATTR_PRINTF (1, 2);
 unsigned int countParsers (void);
 const char *getLanguageName (const langType language);
+bool isLanguageVisible(const langType language);
+bool isLanguageEnabled(const langType language);
+unsigned int countLanguageKinds(const langType language);
+kindDefinition* getLanguageKind(const langType language, int kindIndex);
 
 #undef bool
 #undef false

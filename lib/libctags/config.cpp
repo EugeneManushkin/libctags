@@ -37,17 +37,14 @@ namespace
   class ConfigImpl : public LibCtags::Config
   {
   public:
-    ConfigImpl()
+    void AddLanguage(std::string const& language, LanguageConfig&& config)
     {
-      auto count = static_cast<langType>(countParsers());
-      for (langType id = 0; id < count; ++id)
-      {
-        if (!isLanguageVisible(id))
-          continue;
+      Languages.insert(std::make_pair(language, std::move(config)));
+    }
 
-        LanguageConfig config = {id, !!isLanguageEnabled(id), GetLanguageKinds(id)};
-        Languages.insert(std::make_pair(std::string(getLanguageName(id)), config));
-      }
+    virtual std::unique_ptr<LibCtags::Config> Clone() const override
+    {
+      return std::unique_ptr<LibCtags::Config>(new ConfigImpl(*this));
     }
 
     virtual std::vector<std::string> GetLanguages() const override
@@ -71,13 +68,26 @@ namespace
   private:
     std::unordered_map<std::string, LanguageConfig> Languages;
   };
-
 }
 
 namespace LibCtags
 {
-  std::unique_ptr<Config> GetConfig()
+  namespace Internal
   {
-    return std::unique_ptr<Config>(new ConfigImpl());
+    std::unique_ptr<Config> CreateConfig()
+    {
+      ConfigImpl result;
+      auto count = static_cast<langType>(countParsers());
+      for (langType id = 0; id < count; ++id)
+      {
+        if (!isLanguageVisible(id))
+          continue;
+
+        LanguageConfig config = {id, !!isLanguageEnabled(id), GetLanguageKinds(id)};
+        result.AddLanguage(std::string(getLanguageName(id)), std::move(config));
+      }
+
+      return std::unique_ptr<Config>(new ConfigImpl(std::move(result)));
+    }
   }
 }

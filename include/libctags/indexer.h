@@ -8,6 +8,4 @@ namespace LibCtags
     virtual ~Indexer() = default;
     virtual void Index(char const* file) = 0;
   };
-
-  Indexer& GetIndexer();
 }

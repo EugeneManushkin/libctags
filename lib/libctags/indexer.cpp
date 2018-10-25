@@ -1,5 +1,6 @@
 #include "include_internal_api.h"
 
+#include <libctags/config.h>
 #include <libctags/indexer.h>
 
 #include <algorithm>
@@ -54,22 +55,9 @@ namespace
   class IndexerImpl : public LibCtags::Indexer
   {
   public:
-    IndexerImpl()
-      : Executable("CtagsTestProgram")
+    IndexerImpl(LibCtags::Config const& config)
+      : Config(config.Clone())
     {
-      initDefaultTrashBox();
-      DEBUG_INIT();
-      setErrorPrinter(stderrDefaultErrorPrinter, NULL);
-      setTagWriter(WRITER_U_CTAGS);
-//TODO: remove
-      setCurrentDirectory();
-
-      setExecutableName(Executable.c_str());
-      checkRegex ();
-      initFieldObjects();
-      initXtagObjects();
-      initializeParsing();
-      initOptions();
     }
 
     virtual void Index(char const* file) override
@@ -80,19 +68,17 @@ namespace
     }
 
   private:
-    std::string Executable;
+    std::unique_ptr<LibCtags::Config> Config;
   };
-
-  std::unique_ptr<LibCtags::Indexer> IndexerInstance;
 }
 
 namespace LibCtags
 {
-  LibCtags::Indexer& GetIndexer()
+  namespace Internal
   {
-    if (!IndexerInstance)
-      IndexerInstance.reset(new IndexerImpl);
-
-    return *IndexerInstance;
+    std::unique_ptr<Indexer> CreateIndexer(Config const& config)
+    {
+      return std::unique_ptr<Indexer>(new IndexerImpl(config));
+    }
   }
 }

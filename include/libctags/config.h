@@ -18,9 +18,8 @@ namespace LibCtags
   {
   public:
     virtual ~Config() = default;
+    virtual std::unique_ptr<Config> Clone() const = 0;
     virtual std::vector<std::string> GetLanguages() const = 0;
     virtual std::vector<Kind> GetKinds(std::string const& language) const = 0;
   };
-
-  std::unique_ptr<Config> GetConfig();
 }

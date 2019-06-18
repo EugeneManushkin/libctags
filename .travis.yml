@@ -4,4 +4,4 @@ compiler:
   - gcc
 
 script:
-  - sh travis/run.sh
+  - ./travis/run.sh

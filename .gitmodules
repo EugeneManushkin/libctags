@@ -1,3 +1,0 @@
-[submodule "lib/ctags"]
-	path = lib/ctags_internal/ctags
-	url = https://github.com/universal-ctags/ctags.git

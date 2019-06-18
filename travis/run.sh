@@ -1,3 +1,3 @@
-#!/bin/bash -x
+#!/bin/sh -x
 
 echo "Preved-medved"

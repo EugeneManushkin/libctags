@@ -1,0 +1,10 @@
+name: Build libctags
+run-name: ${{ github.actor }} testing github actions
+on: [push]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo step1
+      - run: echo step2
+      - run: cmake --version

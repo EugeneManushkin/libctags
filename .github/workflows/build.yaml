@@ -1,10 +1,17 @@
 name: Build libctags
 run-name: ${{ github.actor }} testing github actions
 on: [push, workflow_dispatch]
+env:
+  CTAGS_VERSION_MAJOR: 2
+  CTAGS_VERSION_MINOR: 1
+  CTAGS_BUILD: 98
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - run: cmake -G
-      - run: echo preved
-      - run: cmake --version
+      - name: Echo build
+        run: echo "${{ env.CTAGS_VERSION_MAJOR }}.${{ env.CTAGS_VERSION_MINOR }}.0.${{ env.CTAGS_BUILD }}"
+
+      - name: List directory
+        run: |
+          cat ${{ github.workspace }}\CMakeLists.txt

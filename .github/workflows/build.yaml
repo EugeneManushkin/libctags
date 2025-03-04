@@ -5,6 +5,6 @@ jobs:
   build:
     runs-on: windows-latest
     steps:
-      - run: echo step1
-      - run: echo step2
+      - run: cmake -G
+      - run: echo preved
       - run: cmake --version

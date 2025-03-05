@@ -1,26 +1,37 @@
 name: Build libctags
 run-name: ${{ github.actor }} testing github actions
-on: [push, workflow_dispatch]
+on: [push, pull_request, workflow_dispatch]
 env:
-  CTAGS_VERSION_MAJOR: 2
-  CTAGS_VERSION_MINOR: 1
-  CTAGS_BUILD: 98
+  BUILD_DIR: ${{ github.workspace }}\.temp
+
 jobs:
   build:
     runs-on: windows-latest
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          submodules: "recursive"
+#        with:
+#          submodules: "recursive"
 
       - name: List directory
         run: |
-          echo "cur dir:"
-          dir .
           echo "github.workspace dir:"
           dir ${{ github.workspace }}
 
+      - name: Make directories
+        run: |
+          md .temp
 
-#      - name: Echo build
-#        run: echo "${{ env.CTAGS_VERSION_MAJOR }}.${{ env.CTAGS_VERSION_MINOR }}.0.${{ env.CTAGS_BUILD }}"
+      - name: Generate
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+          cmake -G "Visual Studio 17 2022" -A x64 ..
+          echo "++ current:"
+          dir .
+          echo "++ parent:"
+          dir ${{ github.workspace }}
+
+      - name: Build
+        working-directory: ${{ env.BUILD_DIR }}
+        run: |
+          cmake --build . -v --config Release

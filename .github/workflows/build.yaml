@@ -11,16 +11,26 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
-        with:
-          submodules: "recursive"
+#        with:
+#          submodules: "recursive"
 
       - name: List directory
         run: |
-          echo "cur dir:"
-          dir .
           echo "github.workspace dir:"
           dir ${{ github.workspace }}
 
+      - name: Make directories
+        run: |
+          md .temp
+
+      - name: Generate
+        working-directory: ${{ github.workspace }}\.temp
+        run: |
+          cmake -G "Visual Studio 17 2022" -A x64 ..
+          echo "++ current:"
+          dir .
+          echo "++ parent:"
+          dir ${{ github.workspace }}
 
 #      - name: Echo build
 #        run: echo "${{ env.CTAGS_VERSION_MAJOR }}.${{ env.CTAGS_VERSION_MINOR }}.0.${{ env.CTAGS_BUILD }}"

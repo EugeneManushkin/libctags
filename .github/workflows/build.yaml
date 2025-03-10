@@ -4,10 +4,6 @@ on: [push, pull_request, workflow_dispatch]
 env:
   VERSION_VAR: "3.2.1"
 
-defaults:
-  run:
-    shell: cmd
-
 jobs:
   build:
     strategy:
@@ -18,8 +14,11 @@ jobs:
             arch: Win32
           - id: x64
             arch: x64
- 
     runs-on: windows-latest
+    defaults:
+      run:
+        shell: cmd
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4

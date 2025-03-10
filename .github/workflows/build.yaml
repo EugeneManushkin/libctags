@@ -5,47 +5,82 @@ env:
   VERSION_VAR: "3.2.1"
 
 jobs:
-  build:
-    strategy:
-      matrix:
-        id: [x86, x64]
-        include:
-          - id: x86
-            arch: Win32
-          - id: x64
-            arch: x64
+#  GetVersion:
+#    runs-on: ubuntu-latest
+#    outputs:
+#      version: ${{ steps.get.outputs.ver }}
+#    steps:
+#      - id: get
+#        run: echo "ver=hello" >> "$GITHUB_OUTPUT"
+
+  GetVersion:
+    runs-on: windows-latest
+    outputs:
+      version: ${{ steps.get.outputs.ver }}
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - id: get
+        run: |
+          & ${{ github.workspace }}\.github\workflows\run.bat
+          $outp = & ${{ github.workspace }}\.github\workflows\run.bat
+          echo "++$outp"
+          echo "ver=$outp" >> "$ENV:GITHUB_OUTPUT"
+
+  job2:
     runs-on: windows-latest
     defaults:
       run:
         shell: cmd
-
+    needs: GetVersion
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-#        with:
-#          submodules: "recursive"
-
-      - name: Matrix info
+      - env:
+          OUTPUT1: ${{needs.GetVersion.outputs.version}}
         run: |
-          echo "id: ${{ matrix.id }}, arch: ${{ matrix.arch }}"
+          echo "+++ %OUTPUT1%"
+          echo "--- ${{needs.GetVersion.outputs.version}}"
 
-      - name: Make directories
-        run: |
-          set BUILD_DIR=${{ runner.temp }}
-          echo "Build dir: %BUILD_DIR%"
-          dir %BUILD_DIR%
-
-      - name: Run batch script
-        run: |
-          set BUILD_DIR=${{ runner.temp }}
-          .github\workflows\build.bat
-
-      - name: Generate
-        working-directory: ${{ runner.temp }}
-        run: |
-          cmake -G "Visual Studio 17 2022" -A ${{ matrix.arch }} ${{ github.workspace }}
-
-      - name: Build
-        working-directory: ${{ runner.temp }}
-        run: |
-          cmake --build . -v --config Release
+#  build:
+#    strategy:
+#      matrix:
+#        id: [x86, x64]
+#        include:
+#          - id: x86
+#            arch: Win32
+#          - id: x64
+#            arch: x64
+#    runs-on: windows-latest
+#    defaults:
+#      run:
+#        shell: cmd
+#
+#    steps:
+#      - name: Checkout repo
+#        uses: actions/checkout@v4
+##        with:
+##          submodules: "recursive"
+#
+#      - name: Matrix info
+#        run: |
+#          echo "id: ${{ matrix.id }}, arch: ${{ matrix.arch }}"
+#
+#      - name: Make directories
+#        run: |
+#          set BUILD_DIR=${{ runner.temp }}
+#          echo "Build dir: %BUILD_DIR%"
+#          dir %BUILD_DIR%
+#
+#      - name: Run batch script
+#        run: |
+#          set BUILD_DIR=${{ runner.temp }}
+#          .github\workflows\build.bat
+#
+#      - name: Generate
+#        working-directory: ${{ runner.temp }}
+#        run: |
+#          cmake -G "Visual Studio 17 2022" -A ${{ matrix.arch }} ${{ github.workspace }}
+#
+#      - name: Build
+#        working-directory: ${{ runner.temp }}
+#        run: |
+#          cmake --build . -v --config Release

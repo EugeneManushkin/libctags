@@ -1,2 +1,3 @@
+[![Build libctags](https://github.com/EugeneManushkin/libctags/actions/workflows/build.yaml/badge.svg)](https://github.com/EugeneManushkin/libctags/actions/workflows/build.yaml)
 # Attempt to use ctags as a static library
 # Under construction...

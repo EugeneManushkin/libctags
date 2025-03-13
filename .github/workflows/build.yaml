@@ -34,10 +34,14 @@ jobs:
         shell: cmd
     needs: GetVersion
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
       - env:
           OUTPUT1: ${{needs.GetVersion.outputs.version}}
         run: |
           echo "+++ %OUTPUT1%"
+          fail.bat
           echo "--- ${{needs.GetVersion.outputs.version}}"
 
 #  build:
